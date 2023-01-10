@@ -1,0 +1,8 @@
+Cette archive contient trois fichiers : 
+Corpus_Reddit_long.xml -> document contenant le corpus Reddit complet
+ExtractionMessages.py -> le script d'extraction de messages en fonction de leur tfidf
+Le présent readme
+
+Le script une fois lancé donne en sortie plusieurs fichiers : 
+CalculsTfIdf.csv -> fichier contenant les métriques en détail de chaque token
+toAnnotate.csv -> document final contenant les messages à annoter et que l'on va plus tard convertir en .jsonl
