@@ -12,7 +12,6 @@ from sklearn.feature_extraction.text import TfidfTransformer
 
 path_corpus = "/mnt/terabox/research/projet_m2/Corpus_Reddit_long.xml"
 path_corpus_out = "CalculsTfIdf.csv"
-threshold = -7.0
 
 def get_messages(path):
     #On utilise la bibliothèque etree pour pouvoir parser le corpus reddit-TIFU qui est au format xml
@@ -139,7 +138,11 @@ newroot = E("Corpus_numerote")
 
 data = pd.read_csv("CalculsTfIdf.csv", encoding="UTF-8", quotechar='"', sep=",", decimal=".", low_memory = False)
 
+x = list(data["logtfidf"])
+x = np.array(x)
+threshold = float(np.nanquantile(x, 0.02))
 data2 = data.query(f"logtfidf < {threshold}")
+
 
 idDocs_to_annotate = set(data2["idDoc"].values)
 
