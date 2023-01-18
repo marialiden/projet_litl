@@ -152,3 +152,13 @@ df_to_annotate.to_csv(
     index = False,
     sep=","
 )
+
+import pandas as pd
+import json 
+data = pd.read_csv("toAnnotate.csv", encoding="UTF-8", header=0, quotechar='"', sep=",", decimal=".")
+msgs = dict()  
+sortie = open('toAnnotate.jsonl', "w+") 
+for index in range(0, len(data['Message'])) :   
+    msgs[index] = {'text' : data.loc[index]["Message"],'meta' : {"identifiant" : index}} 
+    json.dump(msgs[index],sortie)  # conversion du fichier au format jsonl + écriture dans le fichier 
+    sortie.write("\n")
