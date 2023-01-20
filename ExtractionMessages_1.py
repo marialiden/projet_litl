@@ -156,12 +156,12 @@ df_to_annotate.to_csv(
     sep=","
 )
 
-import pandas as pd
+
 import json 
-data = pd.read_csv("toAnnotate.csv", encoding="UTF-8", header=0, quotechar='"', sep=",", decimal=".")
 msgs = dict()  
 sortie = open('toAnnotate.jsonl', "w+") 
-for index in range(0, len(data['Message'])) :   
-    msgs[index] = {'text' : data.loc[index]["Message"],'meta' : {"identifiant" : index}} 
+for index in range(0, len(df_to_annotate['Message'])) : 
+    iddoc=df_to_annotate.loc[index]["docId"].astype(str) #il n'est pas possible de stocker une valeur de type int64 (TypeError: Object of type int64 is not JSON serializable )
+    msgs[index] = {'text' : df_to_annotate.loc[index]["Message"],'meta' : {"identifiant" : iddoc}} 
     json.dump(msgs[index],sortie)  # conversion du fichier au format jsonl + écriture dans le fichier 
     sortie.write("\n")
