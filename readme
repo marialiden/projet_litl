@@ -1,6 +1,6 @@
 Cette archive contient plusieurs fichiers : 
 ExtractionMessages.py -> le script d'extraction de messages en fonction de leur tfidf
-
+Loglikelihood_Reddit.py -> le script d'extraction de trigrammes inhabituels selon leur fréquence brute et leur score log likelihood
 
 Le script une fois lancé donne en sortie plusieurs fichiers : 
 CalculsTfIdf.csv -> fichier contenant les métriques en détail de chaque token
