@@ -7,6 +7,6 @@ CalculsTfIdf.csv -> fichier contenant les métriques en détail de chaque trigra
 toAnnotate.csv -> document final contenant les messages à annoter
 toAnnotate.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
 
-Le script ExtractionMessages1.py une fois lancé donne en sortie plusieurs fichiers : 
+Le script Loglikelihood_Reddit.py une fois lancé donne en sortie plusieurs fichiers : 
 Reddit_loglikelihood_Phrases_Tokens.csv -> fichier contenant les métriques en détail de chaque trigramme
 toAnnotate_LL_Phrases_Tokens.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
