@@ -1,7 +1,12 @@
 Cette archive contient plusieurs fichiers : 
-ExtractionMessages.py -> le script d'extraction de messages en fonction de leur tfidf
-Loglikelihood_Reddit.py -> le script d'extraction de trigrammes inhabituels selon leur fréquence brute et leur score log likelihood
+ExtractionMessages1.py -> le script d'extraction de trigrammes en fonction de leur score tf/idf
+Loglikelihood_Reddit.py -> le script d'extraction de trigrammes selon leur fréquence brute et leur score log likelihood
 
-Le script une fois lancé donne en sortie plusieurs fichiers : 
-CalculsTfIdf.csv -> fichier contenant les métriques en détail de chaque token
-toAnnotate.csv -> document final contenant les messages à annoter et que l'on va plus tard convertir en .jsonl
+Le script ExtractionMessages1.py une fois lancé donne en sortie plusieurs fichiers : 
+CalculsTfIdf.csv -> fichier contenant les métriques en détail de chaque trigramme
+toAnnotate.csv -> document final contenant les messages à annoter
+toAnnotate.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
+
+Le script ExtractionMessages1.py une fois lancé donne en sortie plusieurs fichiers : 
+Reddit_loglikelihood_Phrases_Tokens.csv -> fichier contenant les métriques en détail de chaque trigramme
+toAnnotate_LL_Phrases_Tokens.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
