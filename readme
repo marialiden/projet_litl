@@ -1,4 +1,4 @@
-Cette archive contient plusieurs fichiers : 
+Cette archive contient deux scripts : 
 ExtractionMessages1.py -> le script d'extraction de trigrammes en fonction de leur score tf/idf
 Loglikelihood_Reddit.py -> le script d'extraction de trigrammes selon leur fréquence brute et leur score log likelihood
 
