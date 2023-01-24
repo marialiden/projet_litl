@@ -5,7 +5,7 @@ Informations sur les calculs:
 Calcul du log likelihood repris de: http://termostat.ling.umontreal.ca/doc_termostat/doc_termostat_en.html
 
 Il y a deux versions du code : une version où l'entrée est le document json contenant tous le corpus Reddit-TIFU tel qu'il a été téléchargé sur Huggingface,
-et un autre version avec le xml généré par nous qui ne contient que les postes de ce corpus.
+et une autre version avec le xml généré par nous qui ne contient que les postes de ce corpus.
 
 Commande: python3 Loglikelihood_Reddit.py 
    
@@ -77,10 +77,11 @@ for element in tqdm(message):
             text = re.sub("\t"," ",text)
             text = re.sub("\n", " ",text)
             text=re.sub(r'(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})', '<url>', text) #on remplace les url par une balise <url>
-            text=text.lower()
+            text=text.lower() #On transforme le texte en minuscules
             #On stocke les messages dans une liste
             corpus.append(text)
             #On stocke les trigrammes dans le dictionnaire avec leur fréquence brute dans le corpus
+            #On stocke également la longueur de chaque message dans la liste corpus_len
             for i in range(0,len(text)-2):
                 corpus_len=corpus_len+1
                 trigramme=text[i:i+3]
@@ -143,7 +144,7 @@ for x in tqdm(corpus):
             #On peut donc être sûr à 99% que nos résultats veulent dire quelque chose
             if LL > 6.63: 
                 #messages[x]=Nb #Stockage des messages à annoter dans un dictionnaire (valeur=identifiant, clé=message)
-                #On identifi où se trouve le trigramme dans le message pour pouvoir recupérer les mots autour
+                #On identifie où se trouve le trigramme dans le message pour pouvoir recupérer les mots autour
                 match=(re.search(r''+re.escape(y)+r'', x))
                 
                 
@@ -206,7 +207,7 @@ for i in range(0, len(df['Phrase'])):
     p=re.sub('&nbsp;', ' ',p)
     iddoc=df['Id'][i]
     if p not in phrases:
-        phrases[p] = {'text' : str(p),'meta' : {"identifiant" : str(iddoc), 'methode': "tfidf"}]} 
+        phrases[p] = {'text' : str(p),'meta' : {"identifiant" : str(iddoc), 'methode': "LL"}]} 
     
         json.dump(phrases[p],sortie, ensure_ascii=False)  # conversion du fichier au format jsonl + écriture dans le fichier 
         sortie.write("\n")
