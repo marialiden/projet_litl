@@ -91,7 +91,7 @@ for element in tqdm(message):
 values=list(trigrammes_tot.values())
 
 #Pour ne pas avoir un dataframe trop volumineux, 
-#on stocke uniquement les trigrammes qui ont une fréquence brute dans le corpus équivalente ou inférieure à la médiane
+#on stocke uniquement les trigrammes qui ont une fréquence brute dans le corpus équivalente ou inférieure au premier quartile
 #Ici on identifie le seuil qu'on va utiliser plus tard dans le script
 seuil=np.quantile(values, 0.25)
 
