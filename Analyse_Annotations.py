@@ -15,8 +15,6 @@
 # - Spans peut contenir plusieurs annotations, à savoir plusieurs étiquettes "start", "end" et "label"
 # - La clé du spans est un string dans V1, mais une liste dans V2
 
-# In[ ]:
-
 
 #Importation des librairies nécéssaires
 import pandas as pd
@@ -24,9 +22,6 @@ import json
 import re
 import numpy as np
 from sklearn.metrics import cohen_kappa_score
-
-
-# In[ ]:
 
 
 #On ouvre le fichier à traiter, à savoir le jsonl contenant les annotations de l'équipe besedo
@@ -108,15 +103,8 @@ def get_dataframe_V1(fichier):
 df_besedo=get_dataframe_V1(besedo)
 
 
-# In[ ]:
-
-
 #On vérifie que tout est correcte dans le dataframe 
 df_besedo
-
-
-# In[ ]:
-
 
 #Pour une raison inconnue, la colonne label a des valeurs None s'il n'y a pas d'annotations, 
 #même si on a mis None comme un string dans la fonction ci-dessus. 
@@ -124,14 +112,9 @@ df_besedo
 df_besedo['label'] = df_besedo['label']. replace(np. nan, 'None')
 
 
-# In[ ]:
-
-
 #Exportation du dataframe sous format csv
 df_besedo.to_csv('besedo_annot.csv', sep="\t", encoding="utf8")
 
-
-# In[ ]:
 
 
 #Fonction qui permet de lire le fichier jsol comme un objet json, mais ligne par ligne (bien pour pouvoir exploiter le fait que ce soit des dictionnaires et des listes dedans)
@@ -222,81 +205,23 @@ def get_dataframe_V2(fichier):
     return AnalyseAnnot
 
 
-# In[ ]:
-
 
 #Création du dataframe des annotations de l'équipe litl
 df_litl=get_dataframe_V2(litl)
 df_litl
 
 
-# In[ ]:
-
 
 #Exportation du dataframe sous format .csv
 df_litl.to_csv('litl_annot.csv', sep=",", encoding="utf8")
-
-
-# In[ ]:
 
 
 #Répartition des labels dans le dataframe Besedo (toutes les annotations)
 df_besedo['label'].value_counts()
 
 
-# In[ ]:
-
-
 #Répartition des methodes dans le dataframe Besedo (toutes les annotations)
 df_besedo['method'].value_counts()
-
-
-# In[ ]:
-
-
-#Fonction qui crée un dataframe à partir d'un fichier jsonl, indiquant si l'extrait contient des CCI ou pas
-def get_dataframe_cci(fichier):
-    AnalyseAnnot = pd.DataFrame(columns=["identifiant", "text",  "type"])
-    text_task=[]
-    for line in fichier.readlines() :    # lecture du fichier ligne par ligne
-        json_object = json.loads(line)   # on stocke la ligne sous forme de dictionnaire dans la variable json_object
-
-        # on peut maintenant accéder à chaque élément du dictionnaire 
-
-        txt = json_object["text"]     # bout de texte annoté 
-        task= json_object["_task_hash"] #la valeur de _task_hash
-        txt_hash=[txt,task]
-        
-        if txt_hash not in text_task:
-            text_task.append(txt_hash)
-            myregex = r"(\d+).*methode.*(\w\w)"      # pour isoler les éléments de "meta" : identifiant & methode
-            match = re.search(myregex, json_object["meta"])
-            if match : 
-                ide = match.group(1)
-
-            if (json_object["spans"] is None) or (json_object["spans"]=="[]"):     # pour remplir les cases meme quand il n'y a pas d'annotations, on met des 0 pour pouvoir faire des tranches de listes plus tard
-                tag = "NO CCI"
-
-
-            elif json_object["spans"] != None :      # pour isoler les éléments de "spans" : index début & fin & label
-                tag = "CCI"
-
-            insert_row = {"text":txt,      # on stocke les variables dans un dictionnaire 
-                                  "identifiant":ide, "type":tag}
-
-        AnalyseAnnot = pd.concat([AnalyseAnnot, pd.DataFrame([insert_row])])   # on ajoute la ligne au dataframe
-
-    AnalyseAnnot.reset_index(drop=True, inplace=True) #Pour que l'index du dataframe soit correcte, on le réinitialise
-        
-    return AnalyseAnnot
-
-besedo = open("unusual-char-m2-besedo.jsonl", 'r', encoding='utf8')
-df_besedo_cci=get_dataframe_cci(besedo)
-df_besedo_cci
-#df_litl=get_dataframe(litl)
-
-
-# In[ ]:
 
 
 #On créé un nouveau dataframe de Besedo qui contient uniquement les textes annotés par l'équipe litl
@@ -310,8 +235,6 @@ df_litl2=(df_litl[df_litl.text.isin(df_besedo2.text)])
 df_litl2
 df_litl2.reset_index(drop=True, inplace=True)
 
-
-# In[ ]:
 
 
 #Pour savoir combien d'extraits annotés par Litl n'ont pas été annotés par Besedo
@@ -332,14 +255,9 @@ for i in range(0, len(df_besedo2['text'])):
 print(len(extrait1 - extrait))
 
 
-# In[ ]:
-
 
 #Affichage des labels de l'équipe Besedo
 df_besedo2.label.value_counts()
-
-
-# In[ ]:
 
 
 #Affichage des labels de l'équipe Litl
@@ -352,9 +270,6 @@ df_litl2.label.value_counts()
 # - Catégorie 1 : Accord. Nous considérons qu’un accord correspond à une annotation dont l’étiquette est pareille et dont le span est soit identique, soit superposé ou chevauché. Dans cette catégorie on inclut également tous les cas où les deux annotateurs ont considéré qu’il n’y a pas de CCI dans l’extrait.
 # - Catégorie 2 : Accord concernant la présence d’une CCI, mais désaccord concernant l’étiquette attribuée. Tout comme dans la catégorie 1, nous incluons les annotations superposées et chevauchées.
 # - Catégorie 3 : Désaccord. Il s’agit des annotations pour lesquelles le segment ayant été annoté par une équipe n’a pas été annoté du tout par l’autre équipe. Autrement dit, l'une des équipes a détecté une CCI mais l’autre équipe ne l’a pas détectée.  
-# 
-
-# In[ ]:
 
 
 #création des nouveaux dataframes
@@ -596,29 +511,18 @@ print("Catégorie 2:", cat_2)
 print("Catégorie 3:", len(df_besedo_dif)+len(df_litl_dif))
 
 
-# In[ ]:
-
-
 #Pourcentage d'annotations de catégorie 1 et 2 
 (cat_1+cat_2)/(len(df_besedo_dif)+len(df_litl_dif)+(cat_1+cat_2))
 
-
-# In[ ]:
 
 
 #Affichage du dataframe avec les annotations divergentes de LITL
 df_litl_dif
 
 
-# In[ ]:
-
 
 #Affichage du dataframe avec les annotations divergentes de Besedo
 df_besedo_dif
-
-
-# In[ ]:
-
 
 #Calcul de kappa de cohen, global et par étiquette
 score_global= cohen_kappa_score(lab_b,lab_l)
@@ -639,63 +543,34 @@ print('score ks', score_ks)
 print('score onomatopoeia',round(score_ono,2))
 
 
-# In[ ]:
-
-
 #Affichage de la répartition des étiquettes dans df_litl_dif
 df_litl_dif.label.value_counts()
 
-
-# In[ ]:
-
-
 #Affichage de la répartition des étiquettes dans df_besedo_dif
 df_besedo_dif.label.value_counts()
-
-
-# In[ ]:
 
 
 #Création d'un dataframe de la catégorie 1 (pour l'analyse)
 cat1_df=pd.DataFrame(Annot_cat1, columns=["annotateur","text","span","start", "end", "label", "method"])
 
 
-# In[ ]:
-
-
 #Répartition des labels dans la catégorie 1
 cat1_df.label.value_counts()
 
-
-# In[ ]:
-
-
 #Export du dataframe en csv pour la catégorie 1
 cat1_df.to_csv('Annotations_cat1.csv', sep="\t", encoding="utf8")
-
-
-# In[ ]:
 
 
 #Création d'un dataframe de la catégorie 2 (pour l'analyse)
 cat2_df=pd.DataFrame(Annot_cat2, columns=["annotateur","text","span","start", "end", "label", "method"])
 
 
-# In[ ]:
-
-
 #Répartition des labels dans la catégorie 2
 cat2_df['label'].value_counts()
 
 
-# In[ ]:
-
-
 #Export du dataframe en csv pour la catégorie 2
 cat2_df.to_csv('Annotations_cat2.csv', sep="\t", encoding="utf8")
-
-
-# In[ ]:
 
 
 #Création d'un dictionnaire où on stocke toutes les paires d'annotations possibles et leur comptage,
