@@ -1,12 +1,25 @@
-Cette archive contient deux scripts : 
-ExtractionMessages1.py -> le script d'extraction de trigrammes en fonction de leur score tf/idf
-Loglikelihood_Reddit.py -> le script d'extraction de trigrammes selon leur fréquence brute et leur score log likelihood
+Cette archive contient trois scripts : 
+ExtractionMessages1.py -> un script d'extraction de trigrammes en fonction de leur score tf/idf
+Loglikelihood_Reddit.py -> un script d'extraction de trigrammes selon leur fréquence brute et leur score log likelihood
+Analyse_Annotations.py -> un script pour analyser et comparer les annotations faites par deux équipes sur Prodigy
 
-Le script ExtractionMessages1.py une fois lancé donne en sortie plusieurs fichiers : 
+ExtractionMessages1.py: 
+- Données d'entrée: fichier .xml contenant tous les postes du Reddit TIFU-SHORT
+- Données de sortie: 
 CalculsTfIdf.csv -> fichier contenant les métriques en détail de chaque trigramme
 toAnnotate.csv -> document final contenant les messages à annoter
 toAnnotate.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
 
-Le script Loglikelihood_Reddit.py une fois lancé donne en sortie plusieurs fichiers : 
+Loglikelihood_Reddit.py: 
+- Données d'entrée: fichier .xml contenant tous les postes du Reddit TIFU-SHORT ou bien le jsonl
+-Données de sortie:
 Reddit_loglikelihood_Phrases_Tokens.csv -> fichier contenant les métriques en détail de chaque trigramme
 toAnnotate_LL_Phrases_Tokens.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
+
+Analyse_Annotations.py: 
+- Données d'entrée: les deux fichiers jsonl. contenant les annotations de Prodigy
+- Données de sortie:
+besedo_annot.csv -> document csv contenant toutes les annotations de l'équipe Besedo, doublons enlevés. Chaque ligne représente une annotation
+litl_annot.csv -> document csv contenant toutes les annotations de l'équipe LITL, doublons enlevés. Chaque ligne représente une annotation
+Nombre d'annotations de chaque catégorie d'annotation (accord, accord partiel, désaccord)
+Les scores de kappa de cohen, global et par étiquette
