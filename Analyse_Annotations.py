@@ -330,14 +330,14 @@ def stockage_cat3(label, cat, liste_besedo, liste_litl):
         liste_litl.append('NON')
 
 #On parcourt les annotations de litl
-for i in df_litl.index:
-    start_l= int(df_litl['start'][i]) #Transformation en int nécéssaire, sinon pas possible de recupérer le span annoté dans le texte
-    end_l=int(df_litl['end'][i])
-    label_l=df_litl['label'][i]
-    met_l=df_litl['method'][i]
-    text= df_litl['text'][i]
-    id_l=df_litl['identifiant'][i]
-    answer_l=df_litl['answer'][i]
+for i in df_litl2.index:
+    start_l= int(df_litl2['start'][i]) #Transformation en int nécéssaire, sinon pas possible de recupérer le span annoté dans le texte
+    end_l=int(df_litl2['end'][i])
+    label_l=df_litl2['label'][i]
+    met_l=df_litl2['method'][i]
+    text= df_litl2['text'][i]
+    id_l=df_litl2['identifiant'][i]
+    answer_l=df_litl2['answer'][i]
     line_l = [text, id_l, met_l, start_l, end_l, label_l, answer_l] #On crée une liste contenant les informations qu'on va stocker dans le nouveau dataframe
     
     #Pour chaque ligne de df_litl, on parcourt les lignes du df_besedo2
@@ -470,7 +470,7 @@ for i in df_litl.index:
                     stockage_cat2(label_b, label_l,'Mistake', mis_l, mis_b)
 
 #Création d'un dataframe contenant toutes les annotations de la catégorie 3 de Litl (à savoir toutes les annotations qui ne font pas partie de la catégorie 1 ou 2)                    
-df_litl_dif = pd.concat([df_litl, df_litl_2]).drop_duplicates(keep=False)
+df_litl_dif = pd.concat([df_litl2, df_litl_2]).drop_duplicates(keep=False)
 df_litl_dif['Annotateur']='LITL'
 df_litl_dif.reset_index(drop=True, inplace=True)
 
