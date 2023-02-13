@@ -115,7 +115,9 @@ df_besedo['label'] = df_besedo['label']. replace(np. nan, 'None')
 #Exportation du dataframe sous format csv
 df_besedo.to_csv('besedo_annot.csv', sep="\t", encoding="utf8")
 
-
+#Création et exportation d'un dataframe contenant uniquement les annotations "other"
+other_df= df_besedo[df_besedo['label']=='Other']
+#other_df.to_csv('besedo_other.csv', sep="\t", encoding="utf8")
 
 #Fonction qui permet de lire le fichier jsol comme un objet json, mais ligne par ligne (bien pour pouvoir exploiter le fait que ce soit des dictionnaires et des listes dedans)
 def load_jsonl(input_path) -> list:
