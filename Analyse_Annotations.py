@@ -271,6 +271,9 @@ df_litl2.label.value_counts()
 # - Catégorie 2 : Accord concernant la présence d’une CCI, mais désaccord concernant l’étiquette attribuée. Tout comme dans la catégorie 1, nous incluons les annotations superposées et chevauchées.
 # - Catégorie 3 : Désaccord. Il s’agit des annotations pour lesquelles le segment ayant été annoté par une équipe n’a pas été annoté du tout par l’autre équipe. Autrement dit, l'une des équipes a détecté une CCI mais l’autre équipe ne l’a pas détectée.  
 
+#On ajoute une colonne avec l'équipe d'annotateurs pour pouvoir analyser le dataframe de la catégorie 3 plus tard 
+df_litl2['annotateur']='LITL'
+df_besedo2['annotateur']='BESEDO'
 
 #création des nouveaux dataframes
 df_litl_2 = pd.DataFrame(columns=list(df_litl.columns))
@@ -281,11 +284,9 @@ df_commun = pd.DataFrame(columns=list(df_litl.columns) + ["cat"] + list(df_besed
 #Initialisation d'une liste par catégorie d'annotation
 Annot_cat1=[]
 Annot_cat2=[]
-Annot_cat3=[]
 
 cat_1=0
 cat_2=0
-cat_3=0
 
 #Initialisation d'une liste par catégorie et par équipe d'annotateur
 fs_b=[]
@@ -312,7 +313,10 @@ def stockage_cat1(besedo, cat, liste_litl, liste_besedo):
     if besedo==cat:
         liste_litl.append('OUI')
         liste_besedo.append('OUI')
-
+    if besedo!=cat:
+        liste_litl.append('NON')
+        liste_besedo.append('NON')
+        
 #Fonction pour remplir les listes si catégorie 2
 def stockage_cat2(besedo,litl, cat, liste_litl, liste_besedo):
     if besedo==cat:
@@ -321,12 +325,18 @@ def stockage_cat2(besedo,litl, cat, liste_litl, liste_besedo):
     elif litl==cat:
         liste_litl.append('OUI')
         liste_besedo.append('NON')
+    else:
+        liste_litl.append('NON')
+        liste_besedo.append('NON')
+        
 
 #Fonction pour remplir les listes si catégorie 2
-# Attention ! inverser liste_litl et liste_besedo quand on remplit les listes dans df_litl_dif
 def stockage_cat3(label, cat, liste_besedo, liste_litl):    
     if label==cat:
         liste_besedo.append('OUI')
+        liste_litl.append('NON')
+    elif label!=cat:
+        liste_besedo.append('NON')
         liste_litl.append('NON')
 
 #On parcourt les annotations de litl
@@ -338,7 +348,8 @@ for i in df_litl2.index:
     text= df_litl2['text'][i]
     id_l=df_litl2['identifiant'][i]
     answer_l=df_litl2['answer'][i]
-    line_l = [text, id_l, met_l, start_l, end_l, label_l, answer_l] #On crée une liste contenant les informations qu'on va stocker dans le nouveau dataframe
+    annot_l=df_litl2['annotateur'][i]
+    line_l = [text, id_l, met_l, start_l, end_l, label_l, answer_l,annot_l] #On crée une liste contenant les informations qu'on va stocker dans le nouveau dataframe
     
     #Pour chaque ligne de df_litl, on parcourt les lignes du df_besedo2
     for j in df_besedo2.index:
@@ -350,7 +361,8 @@ for i in df_litl2.index:
             met_b=df_besedo2['method'][j]
             id_b=df_besedo2['identifiant'][j]
             answer_b=df_besedo2['answer'][j]
-            line_b=[text, id_b, met_b, start_b, end_b, label_b, answer_b]
+            annot_b=df_besedo2['annotateur'][j]
+            line_b=[text, id_b, met_b, start_b, end_b, label_b, answer_b, annot_b]
             
             litl=["litl",text,text[start_l:end_l], start_l,end_l,label_l, met_l]
             besedo=["besedo",df_besedo2['text'][j], df_besedo2['text'][j][start_b:end_b], start_b,end_b,label_b, met_b]
@@ -360,7 +372,8 @@ for i in df_litl2.index:
             if label_b==label_l and start_b==start_l and end_b==end_l: 
                 df_litl_2.loc[len(df_litl_2)] = line_l
                 df_besedo_2.loc[len(df_besedo_2)]=line_b
-                df_commun.loc[len(df_commun)] = line_l + [1] + line_b
+                df_commun.loc[len(df_commun)] = line_l
+                df_commun.loc[len(df_commun)] = line_b
                 cat_1+=1
                 Annot_cat1.append(litl)
                 Annot_cat1.append(besedo)
@@ -378,7 +391,8 @@ for i in df_litl2.index:
             elif label_b == label_l and (start_l >= start_b and end_l <= end_b or start_l <= start_b and end_l >= end_b):
                 df_litl_2.loc[len(df_litl_2)] = line_l
                 df_besedo_2.loc[len(df_besedo_2)]=line_b
-                df_commun.loc[len(df_commun)] = line_l + [1] + line_b
+                df_commun.loc[len(df_commun)] = line_l
+                df_commun.loc[len(df_commun)] = line_b
                 cat_1+=1
                 Annot_cat1.append(litl)
                 Annot_cat1.append(besedo)
@@ -397,7 +411,8 @@ for i in df_litl2.index:
             elif label_b == label_l and (start_l > start_b and end_l > end_b and start_l < end_b or start_l < start_b and end_l < end_b and end_l > start_b):
                 df_litl_2.loc[len(df_litl_2)] = line_l
                 df_besedo_2.loc[len(df_besedo_2)]=line_b
-                df_commun.loc[len(df_commun)] = line_l + [1] + line_b
+                df_commun.loc[len(df_commun)] = line_l
+                df_commun.loc[len(df_commun)] = line_b
                 cat_1+=1
                 Annot_cat1.append(litl)
                 Annot_cat1.append(besedo)
@@ -417,7 +432,8 @@ for i in df_litl2.index:
                 cat_2+=1
                 df_litl_2.loc[len(df_litl_2)] = line_l
                 df_besedo_2.loc[len(df_besedo_2)]=line_b
-                df_commun.loc[len(df_commun)] = line_l + [2] + line_b
+                df_commun.loc[len(df_commun)] = line_l
+                df_commun.loc[len(df_commun)] = line_b
                 Annot_cat2.append(litl)
                 Annot_cat2.append(besedo)
                 lab_l.append(label_l)
@@ -436,7 +452,8 @@ for i in df_litl2.index:
                     cat_2+=1
                     df_litl_2.loc[len(df_litl_2)] = line_l
                     df_besedo_2.loc[len(df_besedo_2)]=line_b
-                    df_commun.loc[len(df_commun)] = line_l + [2] + line_b
+                    df_commun.loc[len(df_commun)] = line_l
+                    df_commun.loc[len(df_commun)] = line_b
                     Annot_cat2.append(litl)
                     Annot_cat2.append(besedo)
                     lab_l.append(label_l)
@@ -455,7 +472,8 @@ for i in df_litl2.index:
                     cat_2+=1
                     df_litl_2.loc[len(df_litl_2)] = line_l
                     #df_litl_2.loc[len(df_litl_2)]=df_litl.iloc[[i]]
-                    df_commun.loc[len(df_commun)] = line_l + [2] + line_b
+                    df_commun.loc[len(df_commun)] = line_l
+                    df_commun.loc[len(df_commun)] = line_b
                     df_besedo_2.loc[len(df_besedo_2)]=line_b
                     Annot_cat2.append(litl)
                     Annot_cat2.append(besedo)
@@ -469,19 +487,14 @@ for i in df_litl2.index:
                     stockage_cat2(label_b, label_l,'None', none_l, none_b)
                     stockage_cat2(label_b, label_l,'Mistake', mis_l, mis_b)
 
-#Création d'un dataframe contenant toutes les annotations de la catégorie 3 de Litl (à savoir toutes les annotations qui ne font pas partie de la catégorie 1 ou 2)                    
-df_litl_dif = pd.concat([df_litl2, df_litl_2]).drop_duplicates(keep=False)
-df_litl_dif['Annotateur']='LITL'
-df_litl_dif.reset_index(drop=True, inplace=True)
+#Création d'un dataframe contenant toutes les annotations de la catégorie 3(à savoir toutes les annotations qui ne font pas partie de la catégorie 1 ou 2)
+#On concatène d'abord le df avec les annotation de la catégorie 1 et 2 et le dataframe des deux annotateurs
+#Puis on enlève tous les doublons (à savoir tous les extraits qui figurent dans les deux catégories)
+annot_cat3= pd.concat([df_litl2, df_besedo2, df_commun], axis=0).drop_duplicates(keep=False)
+annot_cat3.reset_index(inplace = True,drop = True)
 
-#Création d'un dataframe contenant toutes les annotations de la catégorie 3 de Besedo (à savoir toutes les annotations qui ne font pas partie de la catégorie 1 ou 2)
-df_besedo_dif = pd.concat([df_besedo2, df_besedo_2]).drop_duplicates(keep=False)
-df_besedo_dif['Annotateur']='BESEDO'
-df_besedo_dif.reset_index(drop=True, inplace=True)
-
-#On parcourt les annotations de Besedo appartenant à la catégorie 3
-for i in range(0, len(df_besedo_dif)):
-    label=df_besedo_dif['label'][i]
+for i in range(0, len(annot_cat3)):
+    label=annot_cat3['label'][i]
     stockage_cat3(label, 'Emphasis', emp_b, emp_l) 
     stockage_cat3(label, 'Onomatopoeia', ono_b, ono_l)    
     stockage_cat3(label, 'Other', other_b, other_l)    
@@ -492,37 +505,20 @@ for i in range(0, len(df_besedo_dif)):
     lab_b.append(label)
     lab_l.append('NULL')
 
-#On parcourt les annotations de Litl appartenant à la catégorie 3
-for i in range(0, len(df_litl_dif)):
-    label=df_litl_dif['label'][i]
-    stockage_cat3(label, 'Emphasis', emp_l, emp_b) 
-    stockage_cat3(label, 'Onomatopoeia', ono_l, ono_b)    
-    stockage_cat3(label,'Other', other_l, other_b)    
-    stockage_cat3(label, 'Key smashing', ks_l, ks_b)    
-    stockage_cat3(label, 'Funny spelling', fs_l, fs_b)    
-    stockage_cat3(label, 'Mistake', mis_l, mis_b)    
-    stockage_cat3(label, 'None', none_l, none_b)
-    lab_l.append(label) 
-    lab_b.append('NULL')
-
 #Nombre d'annotations de chaque catégorie
 print("Catégorie 1:", cat_1)
 print("Catégorie 2:", cat_2)
-print("Catégorie 3:", len(df_besedo_dif)+len(df_litl_dif))
+print("Catégorie 3:", len(annot_cat3))
 
 
 #Pourcentage d'annotations de catégorie 1 et 2 
-(cat_1+cat_2)/(len(df_besedo_dif)+len(df_litl_dif)+(cat_1+cat_2))
+(cat_1+cat_2)/(cat_1+cat_2)+len(annot_cat3))
 
+#Affichage du dataframe de la catégorie 3
+annot_cat3
 
-
-#Affichage du dataframe avec les annotations divergentes de LITL
-df_litl_dif
-
-
-
-#Affichage du dataframe avec les annotations divergentes de Besedo
-df_besedo_dif
+#Exportation du dataframe de la catégorie 3
+annot_cat3.to_csv('Annotations_cat3.csv', sep="\t", encoding="utf8")
 
 #Calcul de kappa de cohen, global et par étiquette
 score_global= cohen_kappa_score(lab_b,lab_l)
@@ -543,11 +539,8 @@ print('score ks', score_ks)
 print('score onomatopoeia',round(score_ono,2))
 
 
-#Affichage de la répartition des étiquettes dans df_litl_dif
-df_litl_dif.label.value_counts()
-
-#Affichage de la répartition des étiquettes dans df_besedo_dif
-df_besedo_dif.label.value_counts()
+#Affichage de la répartition des étiquettes dans annot_cat3
+annot_cat3.label.value_counts()
 
 
 #Création d'un dataframe de la catégorie 1 (pour l'analyse)
