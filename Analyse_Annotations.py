@@ -237,7 +237,51 @@ df_litl2=(df_litl[df_litl.text.isin(df_besedo2.text)])
 df_litl2
 df_litl2.reset_index(drop=True, inplace=True)
 
+#Fonction qui permet de parcourir un dataframe où chaque ligne correspond à une annotation et donner en sortie un dictionnaire contenant une clé par extrait annoté
+#La clé= l'extrait
+#La valeur : "SANS CCI" si l'extrait contient des labels autres que 'None' et "CCI" s'il contient 'None'
+def cci_ou_pas(df):
+    ligne=dict()
+    for x in df.index:
+        if df['label'][x]=='None':
+            ligne[df['text'][x]]='SANS CCI'
+        else:
+            ligne[df['text'][x]]='CCI'
+        
+    return ligne
 
+bes_annot= cci_ou_pas(df_besedo2)
+litl_annot=cci_ou_pas(df_litl2)
+
+#Transformation en dataframe
+df_bes= pd.DataFrame(bes_annot.items(), columns=['text', 'type'])
+df_lit= pd.DataFrame(litl_annot.items(), columns=['text', 'type'])
+
+#Listes pour stocker les étiquettes associés à chaque exrait pour faire le calcul de kappa
+bes_liste=[]
+litl_liste=[]
+couples=dict()
+
+#On parcourt les annotations de litl
+for i in df_lit.index:
+    type_l=df_lit['type'][i]
+    text= df_lit['text'][i]
+    
+    #Pour chaque ligne de df_litl, on parcourt les lignes du df_besedo2
+    for j in df_bes.index:
+        #Si le texte du df_besedo2 correspond au texte du df_litl, alors on crée des variables pour les valeurs qui nous intéressent
+        if df_bes['text'][j]==text:
+            type_b=df_bes['type'][j]
+            couples[(type_b,type_l)]=couples.get((type_b,type_l),0)+1
+            bes_liste.append(type_b)
+            litl_liste.append(type_l)
+
+#Affichage du score de kappa global
+score_global= cohen_kappa_score(bes_liste,litl_liste)
+print('score_global', round(score_global,2))
+#Affichage des détails du score de kappa
+for x in couples:
+    print(x, couples[x])
 
 #Pour savoir combien d'extraits annotés par Litl n'ont pas été annotés par Besedo
 
