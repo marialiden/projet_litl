@@ -566,25 +566,6 @@ annot_cat3
 #Exportation du dataframe de la catégorie 3
 annot_cat3.to_csv('Annotations_cat3.csv', sep="\t", encoding="utf8")
 
-#Calcul de kappa de cohen, global et par étiquette
-score_global= cohen_kappa_score(lab_b,lab_l)
-score_fs= cohen_kappa_score(fs_b,fs_l)
-score_other= cohen_kappa_score(other_b,other_l)
-score_none= cohen_kappa_score(none_b,none_l)
-score_mistake= cohen_kappa_score(mis_b,mis_l)
-score_emp= cohen_kappa_score(emp_b,emp_l)
-score_ks= cohen_kappa_score(ks_b,ks_l)
-score_ono= cohen_kappa_score(ono_b,ono_l)
-print('score_global', round(score_global,2))
-print('score fs', round(score_fs,2))
-print('score other', round(score_other,2))
-print('score none', round(score_none,2))
-print('score mistake', round(score_mistake,2))
-print('score emphasis', round(score_emp,2))
-print('score ks', score_ks)
-print('score onomatopoeia',round(score_ono,2))
-
-
 #Affichage de la répartition des étiquettes dans annot_cat3
 annot_cat3.label.value_counts()
 
