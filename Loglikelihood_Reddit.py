@@ -9,7 +9,7 @@ et une autre version avec le xml généré par nous qui ne contient que les post
 
 Commande: python3 Loglikelihood_Reddit.py 
    
-@author: M2 LITL 2022-2023
+@author: Maria, Leïla, Wissam et Gabriel, M2 LITL 2022-2023
 """
 import re
 from lxml import etree
@@ -24,11 +24,14 @@ import json
 
 #On crée un dictionnaire pour stocker les trigrammes et leur fréquence brute dans tout le corpus
 trigrammes_tot = dict()
+
 #et une liste avec les messages du corpus.
 corpus=[]
+
 #et un compteur pour avoir accés à la longueur (en trigrammes) du corpus (chaque message -2*le nb de messages dans le corpus)
 corpus_len=0
 
+#Version avec le fichier json en entrée :
 #Initialisation d'une liste pour stocker les lignes du fichier json
 #posts = []
 #with open('tifu_all_tokenized_and_filtered.json', 'r') as fp:
@@ -57,13 +60,14 @@ corpus_len=0
 #        corpus_len=corpus_len+1 #1 est ajout pour chaque caractère parcouru dans chaque message, on ne prend pas en compte les deux derniers caractères, qui ne sont pas pris en compte dans le dictionnaire de trigrammes
 #        trigramme=text[i:i+3]
 #        trigrammes_tot[trigramme]=trigrammes_tot.get(trigramme,0)+1
-               
+
+#Exportation d'un dictionnaire contenant tous les trigrammes différents du corpus ainsi que leur fréquences brutes
 #sortie = open('Trigrammes_frequences_Reddit.csv', 'w')
 #sortie.write("Trigramme"+"\t"+"Fréquence brute"+"\n")  
 #for x in trigrammes_tot:
 #    sortie.write(str(x)+"\t"+str(trigrammes_tot[x])+"\n")  
 
-#Version avec xml au lieu de json - si utilisé, met la version json en commentaire
+#Version avec xml au lieu de json - si utilisé, met la version json ci-dessus en commentaire
 #Le document est le fichier xml en question
 document = etree.parse("Corpus_Reddit_long.xml")
 #on parse le fichier xml
@@ -101,15 +105,6 @@ stats_tot=[]
 #On initialise un compteur de message pour avoir l'identifiant de chaque message
 Nb=0
 
-#Version 1: On initialise un dictionnaire où stocke les messages et leurs identifiants pour créer le jsonl à annoter
-#messages=dict()
-
-#Version 2: On initialise un dictionnaire où stocke les phrases et l'identifiant du message dans lequel elle apparaît pour créer le jsonl à annoter
-sents=dict()
-
-#On initialise un dictionnaire où stocke les tokens et l'identifiant du message dans lequel il apparaît pour créer un dataframe supplémentaire
-tokens=dict()
-
 #On parcourt les messages stockés dans la liste corpus, un message à la fois
 for x in tqdm(corpus):
 
@@ -143,14 +138,11 @@ for x in tqdm(corpus):
             #la probabilité que le résultat, à savoir la diffèrence entre les deux fréquences, se produit par hasard est inférieure à 1 % 
             #On peut donc être sûr à 99% que nos résultats veulent dire quelque chose
             if LL > 6.63: 
-                #messages[x]=Nb #Stockage des messages à annoter dans un dictionnaire (valeur=identifiant, clé=message)
-                #On identifie où se trouve le trigramme dans le message pour pouvoir recupérer les mots autour
                 match=(re.search(r''+re.escape(y)+r'', x))
-                
-                
+               
                 for i in range(0,len(x)-2):
                     
-#                    #On recupère le début et la fin de la phrase      
+                    #On recupère le début et la fin de la phrase      
                     debut=match.start()
                     minimum=match.start()-200
                     while debut>0 and re.search(r'[^\.\?!]',x[debut]) and debut>minimum: #On idenifie le début de la phrase, on s'arrête après 200 caractères si la phrase est trop longue
@@ -172,31 +164,18 @@ for x in tqdm(corpus):
                         
                 sent=x[debut:fin+1] #La phrase à stocker correspond au span qui va du caractère de l'index du debut au caractère de l'index de la fin +1
                 token=x[start:end] #Le mot à stocker correspond au span qui va du caractère de l'index du debut au caractère de l'index de la fin
-                tokens[token]=Nb
-                #print(token)
-                sents[sent]=Nb #Stockage des phrases à annoter dans un dictionnaire (valeur=identifiant du message, clé=phrase)
                 #On stocke dans la LoL les informations qui nous intéressent pour le trigramme en question
                 stats=[Nb,sent,token, y,a,b,c,d,LL] 
                 stats_tot.append(stats)
     #Quand toutes les informations d'un message ont été stockées, on ajoute 1 au compteur d'identifiant et on passe au message suivant.                  
     Nb=Nb+1
-    
-#df_messages= pd.DataFrame(messages.items(), columns=['Message', 'docId'])
-#df_messages_tocsv = df_messages.to_csv("toAnnotate_LL_avecseuil5.csv", sep="\t")
-#    
-df_tokens= pd.DataFrame(tokens.items(), columns=['Token', 'docId'])
-df_tokens_tocsv = df_tokens.to_csv("Tokens_Reddit.csv", sep="\t")
-#    
-##création d'un dataframe avec les phrases contenant les trigrammes extraits
-df_phrases= pd.DataFrame(sents.items(), columns=['Phrase', 'docId'])
-df_phrases_tocsv = df_phrases.to_csv("toAnnotate_LL_phrases.csv", encoding="UTF-8", quotechar='"', sep="\t", decimal=".", line_terminator="\n")
 
     
 #Création de dataframe avec les trigrammes et les stas
 df = pd.DataFrame(stats_tot, columns = ['Id', 'Phrase', 'Token','Trigramme','Fréquence message','Fréquence corpus', 'c', 'd', 'Log likelihood'])
 #On tri le dataframe selon la valeur LL
 final_df = df.sort_values(by=['Log likelihood'], ascending=False)
-csv_data = final_df.to_csv("Reddit_loglikelihood_long_Phrases_Tokens.csv", encoding="UTF-8", quotechar='"', sep="\t", decimal=".", line_terminator="\n")
+csv_data = final_df.to_csv("Reddit_loglikelihood_long_Phrases_Tokens.csv", encoding="UTF-8", quotechar='"', sep="\t", decimal=",", line_terminator="\n")
 
 
 #On stocke les phrases du dataframe dans un json (avec l'identifiant du document en tant que méta-donnée)
@@ -204,7 +183,7 @@ phrases=dict()
 sortie = open('toAnnotate_LL_Phrases_Tokens.jsonl', "w+", encoding="utf8") 
 for i in range(0, len(df['Phrase'])):
     p=df['Phrase'][i]
-    p=re.sub('&nbsp;', ' ',p)
+    p=re.sub('&nbsp;', ' ',p) 
     iddoc=df['Id'][i]
     if p not in phrases:
         phrases[p] = {'text' : str(p),'meta' : {"identifiant" : str(iddoc), 'methode': "LL"}]} 
