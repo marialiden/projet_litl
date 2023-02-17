@@ -30,7 +30,7 @@ Et finalement les fichiers contenant les annotations de Prodigy :
 
 **Loglikelihood_Reddit.py**
 - Données d'entrée: fichier .xml contenant tous les postes du Reddit TIFU-SHORT ou bien le jsonl
--Données de sortie:
+- Données de sortie:
   - Reddit_loglikelihood_Phrases_Tokens.csv -> fichier contenant les métriques en détail de chaque trigramme
   - toAnnotate_LL_Phrases_Tokens.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
 
