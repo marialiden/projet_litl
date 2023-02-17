@@ -17,7 +17,7 @@ L'archive contient également les sorties des scripts, utilisées en entrée pou
 - Reddit_loglikelihood_Phrases_Tokens.csv -> la sortie du script Loglikelihood_Reddit.py
 - besedo_annot.csv -> une sortie du script Accord_annotateurs.py
 
-Et finalement les fichier contenant les annotations de Prodigy:
+Et finalement les fichiers contenant les annotations de Prodigy :
 - unusual-char-m2-besedo.jsonl
 - unusual-char-m2-litl.jsonl
 
