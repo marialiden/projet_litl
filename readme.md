@@ -6,8 +6,8 @@ Pour mener ce travail, deux méthodes basées sur des métriques de fréquence (
 
 ## Contenu de l'archive 
 Cette archive contient trois scripts :
-- ExtractionMessages1.py -> un script d'extraction de trigrammes en fonction de leur score tf/idf
-- Loglikelihood_Reddit.py -> un script d'extraction de trigrammes selon leur fréquence brute et leur score log likelihood
+- TFIDF_PipelineXMLtoJSONL.py -> un script d'extraction de trigrammes en fonction de leur score tf/idf
+- Loglikelihood_PipelineXMLtoJSONL.py -> un script d'extraction de trigrammes selon leur fréquence brute et leur score log likelihood
 - Accord_Annotateurs.py -> un script pour analyser et comparer les annotations faites par deux équipes sur Prodigy
 - Accord script-annotateur (besedoLog).py -> un script pour calculer l'accord entre les annotations des annotateurs et les sorties du script d'extraction de CCI basé sur la métrique du Log Likelihood
 - Accord script-annotateur (besedoTfIdf).py -> un script pour pour calculer l'accord entre les annotations des annotateurs et les sorties du script d'extraction de CCI basé sur la métrique TF/IDF
@@ -21,14 +21,14 @@ Et finalement les fichiers contenant les annotations de Prodigy :
 - unusual-char-m2-besedo.jsonl
 - unusual-char-m2-litl.jsonl
 
-**ExtractionMessages1.py**
+**TFIDF_PipelineXMLtoJSONL.py**
 - Données d'entrée: fichier .xml contenant tous les postes du [Reddit TIFU-SHORT](https://github.com/ctr4si/MMN)
 - Données de sortie:
   - CalculsTfIdf.csv -> fichier contenant les métriques en détail de chaque trigramme
   - toAnnotate.csv -> document final contenant les messages à annoter
   - toAnnotate.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
 
-**Loglikelihood_Reddit.py**
+**Loglikelihood_PipelineXMLtoJSONL.py**
 - Données d'entrée: fichier .xml contenant tous les postes du Reddit TIFU-SHORT ou bien le jsonl
 - Données de sortie:
   - Reddit_loglikelihood_Phrases_Tokens.csv -> fichier contenant les métriques en détail de chaque trigramme
