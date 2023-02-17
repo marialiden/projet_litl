@@ -12,6 +12,15 @@ Cette archive contient trois scripts :
 - Accord script-annotateur (besedoLog).py -> un script pour calculer l'accord entre les annotations des annotateurs et les sorties du script d'extraction de CCI basé sur la métrique du Log Likelihood
 - Accord script-annotateur (besedoTfIdf).py -> un script pour pour calculer l'accord entre les annotations des annotateurs et les sorties du script d'extraction de CCI basé sur la métrique TF/IDF
 
+L'archive contient également les sorties des scripts, utilisées en entrée pour d'autres scripts :
+- tfidf_Vfin.csv (zip) -> la sortie du script xx
+- Reddit_loglikelihood_Phrases_Tokens.csv -> la sortie du script Loglikelihood_Reddit.py
+- besedo_annot.csv -> une sortie du script Accord_annotateurs.py
+
+Et finalement les fichier contenant les annotations de Prodigy:
+- unusual-char-m2-besedo.jsonl
+- unusual-char-m2-litl.jsonl
+
 **ExtractionMessages1.py**
 - Données d'entrée: fichier .xml contenant tous les postes du Reddit TIFU-SHORT
 - Données de sortie:
