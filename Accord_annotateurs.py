@@ -131,7 +131,7 @@ def load_jsonl(input_path) -> list:
     print('Loaded {} records from {}'.format(len(data), input_path))
     return data
 
-litl = load_jsonl("char-m2-litl.jsonl") #On utilise la fonction sur notre fichier jsonl
+litl = load_jsonl("unusual-char-m2-litl.jsonl") #On utilise la fonction sur notre fichier jsonl
 
 #Fonction qui permet de créer un dataframe si le fichier jsonl n'a pas de guillemets autour de la liste de la clé "spans"
 def get_dataframe_V2(fichier):
