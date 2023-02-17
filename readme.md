@@ -22,7 +22,7 @@ Et finalement les fichiers contenant les annotations de Prodigy :
 - unusual-char-m2-litl.jsonl
 
 **ExtractionMessages1.py**
-- Données d'entrée: fichier .xml contenant tous les postes du Reddit TIFU-SHORT
+- Données d'entrée: fichier .xml contenant tous les postes du [Reddit TIFU-SHORT](https://github.com/ctr4si/MMN)
 - Données de sortie:
   - CalculsTfIdf.csv -> fichier contenant les métriques en détail de chaque trigramme
   - toAnnotate.csv -> document final contenant les messages à annoter
