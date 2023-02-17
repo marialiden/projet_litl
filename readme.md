@@ -31,6 +31,7 @@ Cette archive contient trois scripts :
   - besedo_annot.csv -> document csv contenant toutes les annotations de l'équipe Besedo, doublons enlevés. Chaque ligne représente une annotation
   - litl_annot.csv -> document csv contenant toutes les annotations de l'équipe LITL, doublons enlevés. Chaque ligne représente une annotation
   - Nombre d'annotations de chaque catégorie d'annotation (accord, accord partiel, désaccord)
+  - Un fichier csv avec les détails sur les annotations de chaque catégorie d'annotation
   - Le score de kappa de cohen (accord inter-annotateur concernant l'absence ou la présence des CCI)
   - Les détails des confusions entre les catégories
 
