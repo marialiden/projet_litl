@@ -8,7 +8,7 @@ Pour mener ce travail, deux méthodes basées sur des métriques de fréquence (
 Cette archive contient trois scripts :
 ExtractionMessages1.py -> un script d'extraction de trigrammes en fonction de leur score tf/idf
 Loglikelihood_Reddit.py -> un script d'extraction de trigrammes selon leur fréquence brute et leur score log likelihood
-Analyse_Annotations.py -> un script pour analyser et comparer les annotations faites par deux équipes sur Prodigy
+Accord_Annotateurs.py -> un script pour analyser et comparer les annotations faites par deux équipes sur Prodigy
 
 ExtractionMessages1.py:
 - Données d'entrée: fichier .xml contenant tous les postes du Reddit TIFU-SHORT
@@ -23,7 +23,7 @@ Loglikelihood_Reddit.py:
 Reddit_loglikelihood_Phrases_Tokens.csv -> fichier contenant les métriques en détail de chaque trigramme
 toAnnotate_LL_Phrases_Tokens.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
 
-Analyse_Annotations.py:
+Accord_Annotateurs.py:
 - Données d'entrée: les deux fichiers jsonl. contenant les annotations de Prodigy
 - Données de sortie:
 besedo_annot.csv -> document csv contenant toutes les annotations de l'équipe Besedo, doublons enlevés. Chaque ligne représente une annotation
