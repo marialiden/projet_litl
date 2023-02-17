@@ -186,7 +186,7 @@ for i in range(0, len(df['Phrase'])):
     p=re.sub('&nbsp;', ' ',p) 
     iddoc=df['Id'][i]
     if p not in phrases:
-        phrases[p] = {'text' : str(p),'meta' : {"identifiant" : str(iddoc), 'methode': "LL"}]} 
+        phrases[p] = {'text' : str(p),'meta' : [{"identifiant" : str(iddoc), 'methode': "LL"}]} 
     
         json.dump(phrases[p],sortie, ensure_ascii=False)  # conversion du fichier au format jsonl + écriture dans le fichier 
         sortie.write("\n")
