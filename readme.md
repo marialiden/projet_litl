@@ -35,7 +35,7 @@ Et finalement les fichiers contenant les annotations de Prodigy :
   - toAnnotate_LL_Phrases_Tokens.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
 
 **Accord_Annotateurs.py**
-- Données d'entrée: les deux fichiers jsonl. contenant les annotations de Prodigy
+- Données d'entrée: unusual-char-m2-besedo.jsonl ; unusual-char-m2-litl.jsonl 
 - Données de sortie:
   - besedo_annot.csv -> document csv contenant toutes les annotations de l'équipe Besedo, doublons enlevés. Chaque ligne représente une annotation
   - litl_annot.csv -> document csv contenant toutes les annotations de l'équipe LITL, doublons enlevés. Chaque ligne représente une annotation
