@@ -6,33 +6,45 @@ Pour mener ce travail, deux méthodes basées sur des métriques de fréquence (
 
 ## Contenu de l'archive 
 Cette archive contient trois scripts :
--ExtractionMessages1.py -> un script d'extraction de trigrammes en fonction de leur score tf/idf
--Loglikelihood_Reddit.py -> un script d'extraction de trigrammes selon leur fréquence brute et leur score log likelihood
--Accord_Annotateurs.py -> un script pour analyser et comparer les annotations faites par deux équipes sur Prodigy
+- ExtractionMessages1.py -> un script d'extraction de trigrammes en fonction de leur score tf/idf
+- Loglikelihood_Reddit.py -> un script d'extraction de trigrammes selon leur fréquence brute et leur score log likelihood
+- Accord_Annotateurs.py -> un script pour analyser et comparer les annotations faites par deux équipes sur Prodigy
+- Accord script-annotateur (besedoLog).py -> un script pour calculer l'accord entre les annotations des annotateurs et les sorties du script d'extraction de CCI basé sur la métrique du Log Likelihood
+- Accord script-annotateur (besedoTfIdf).py -> un script pour pour calculer l'accord entre les annotations des annotateurs et les sorties du script d'extraction de CCI basé sur la métrique TF/IDF
 
 **ExtractionMessages1.py**
 - Données d'entrée: fichier .xml contenant tous les postes du Reddit TIFU-SHORT
 - Données de sortie:
-  -CalculsTfIdf.csv -> fichier contenant les métriques en détail de chaque trigramme
-  -toAnnotate.csv -> document final contenant les messages à annoter
-  -toAnnotate.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
+  - CalculsTfIdf.csv -> fichier contenant les métriques en détail de chaque trigramme
+  - toAnnotate.csv -> document final contenant les messages à annoter
+  - toAnnotate.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
 
 **Loglikelihood_Reddit.py**
 - Données d'entrée: fichier .xml contenant tous les postes du Reddit TIFU-SHORT ou bien le jsonl
 -Données de sortie:
-  -Reddit_loglikelihood_Phrases_Tokens.csv -> fichier contenant les métriques en détail de chaque trigramme
-  -toAnnotate_LL_Phrases_Tokens.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
+  - Reddit_loglikelihood_Phrases_Tokens.csv -> fichier contenant les métriques en détail de chaque trigramme
+  - toAnnotate_LL_Phrases_Tokens.jsonl -> document final transformé en jsonl pour l'annotation dans Prodigy
 
 **Accord_Annotateurs.py**
 - Données d'entrée: les deux fichiers jsonl. contenant les annotations de Prodigy
 - Données de sortie:
-    - besedo_annot.csv -> document csv contenant toutes les annotations de l'équipe Besedo, doublons enlevés. Chaque ligne représente une annotation
+  - besedo_annot.csv -> document csv contenant toutes les annotations de l'équipe Besedo, doublons enlevés. Chaque ligne représente une annotation
   - litl_annot.csv -> document csv contenant toutes les annotations de l'équipe LITL, doublons enlevés. Chaque ligne représente une annotation
   - Nombre d'annotations de chaque catégorie d'annotation (accord, accord partiel, désaccord)
   - Le score de kappa de cohen (accord inter-annotateur concernant l'absence ou la présence des CCI)
   - Les détails des confusions entre les catégories
 
+**Accord script-annotateur (besedoLog).py:**
+- Données d'entrée: besedo_annot.csv ; Reddit_loglikelihood_long_Phrases_Tokens.csv
+- Données de sortie: informations sur les annotations (terminal)
+
+**Accord script-annotateur (besedoTfIdf).py:**
+- Données d'entrée: besedo_annot.csv ; tfidf_Vfin.csv
+- Données de sortie: informations sur les annotations (terminal)
+
 ## Participants 
 Équipe LITL : Leïla Fabre, Wissam Kerkri, Maria Lidén, Gabriel Mével, Judith Villedey
+
 Équipe Besedo : Jade Moillic, Roxane Bois, Evgeny Bazarov, Mohamed Bamouh
+
 Enseignante référente : Lydia-Mai Ho-dac
